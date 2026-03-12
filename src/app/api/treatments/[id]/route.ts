@@ -1,20 +1,17 @@
-
 import { NextRequest, NextResponse } from 'next/server';
 import { treatmentService } from '@/services/treatment.service';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/db';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 /**
  * GET /api/treatments/[id] - Get single treatment details
  */
-export async function GET(req: NextRequest, { params }: RouteParams) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user) {
@@ -25,7 +22,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     }
 
     const treatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         patient: {
           select: {
@@ -66,7 +63,6 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check access permissions
     if (session.user.role === 'DENTIST' && treatment.dentistId !== session.user.id) {
       return NextResponse.json(
         { error: 'Access denied. You can only view your own treatments.' },
@@ -87,8 +83,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
 /**
  * PUT /api/treatments/[id] - Update treatment
  */
-export async function PUT(req: NextRequest, { params }: RouteParams) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user?.id) {
@@ -98,9 +98,8 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check if treatment exists and user has access
     const existingTreatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { dentistId: true }
     });
 
@@ -111,7 +110,6 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check permissions
     if (session.user.role === 'DENTIST' && existingTreatment.dentistId !== session.user.id) {
       return NextResponse.json(
         { error: 'Access denied. You can only edit your own treatments.' },
@@ -122,7 +120,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     const body = await req.json();
 
     const treatment = await prisma.treatment.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         chiefComplaint: body.chiefComplaint,
         diagnosis: body.diagnosis,
@@ -139,12 +137,10 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
       }
     });
 
-    // Recalculate cost if discount changed
     if (body.discount !== undefined) {
-      await treatmentService.calculateTreatmentCost(params.id);
+      await treatmentService.calculateTreatmentCost(id);
     }
 
-    // Log audit
     await prisma.auditLog.create({
       data: {
         userId: session.user.id,
@@ -152,7 +148,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         userName: session.user.name!,
         action: 'UPDATE_TREATMENT',
         entityType: 'Treatment',
-        entityId: params.id,
+        entityId: id,
         newData: body,
       }
     });
@@ -170,8 +166,12 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 /**
  * DELETE /api/treatments/[id] - Delete treatment
  */
-export async function DELETE(req: NextRequest, { params }: RouteParams) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user?.id || session.user.role !== 'ADMIN') {
@@ -181,9 +181,8 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check if treatment has a receipt
     const treatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: { receipt: true }
     });
 
@@ -195,10 +194,9 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     await prisma.treatment.delete({
-      where: { id: params.id }
+      where: { id }
     });
 
-    // Log audit
     await prisma.auditLog.create({
       data: {
         userId: session.user.id,
@@ -206,7 +204,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
         userName: session.user.name!,
         action: 'DELETE_TREATMENT',
         entityType: 'Treatment',
-        entityId: params.id,
+        entityId: id,
         oldData: treatment ? JSON.parse(JSON.stringify(treatment)) : undefined,
       }
     });
