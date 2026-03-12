@@ -27,7 +27,7 @@ export default auth((req) => {
     "object-src 'none'",
     "base-uri 'self'",
   ].join('; ')
-
+    console.log('✅ CSP setat pentru:', req.nextUrl.pathname)
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-nonce', nonce)
 
