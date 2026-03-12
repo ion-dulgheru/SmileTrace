@@ -8,10 +8,11 @@ try {
   const data = fs.readFileSync(jsonPath, 'utf-8');
   const allHeaders = JSON.parse(data);
 
-  // ✅ Scoate CSP — îl gestionează middleware-ul cu nonce dinamic
+  // ✅ SCOATE CSP din lista statică
   securityHeaders = allHeaders.filter(h => 
     h.key !== 'Content-Security-Policy'
   );
+
 } catch (e) {
   console.warn('⚠️ security-headers.json not found');
 }
