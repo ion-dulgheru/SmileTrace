@@ -1,54 +1,16 @@
 // FrameShield — Next.js Security Headers (Auto-Generated)
-// Generated: 2026-03-10T06:38:43.053Z
-// WARNING: Nu editați manual — regenerați din rules.shield
+const fs = require('fs');
+const path = require('path');
 
-/** @type {import("next").NextConfig} */
-const securityHeaders = [
-  {
-    "key": "Strict-Transport-Security",
-    "value": "max-age=31536000; includeSubDomains; preload"
-  },
-  {
-    "key": "Content-Security-Policy",
-    "value": "default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: http://localhost:3000; font-src 'self' https://fonts.gstatic.com; frame-src 'self'; connect-src 'self' https://api.smiletrace.com https://app.smiletrace.com; frame-ancestors 'self'"
-  },
-  {
-    "key": "X-Frame-Options",
-    "value": "SAMEORIGIN"
-  },
-  {
-    "key": "X-Content-Type-Options",
-    "value": "nosniff"
-  },
-  {
-    "key": "Referrer-Policy",
-    "value": "strict-origin-when-cross-origin"
-  },
-  {
-    "key": "Permissions-Policy",
-    "value": "camera=(), microphone=(), geolocation=(self), payment=(), usb=(), autoplay=(self), fullscreen=(self)"
-  },
-  {
-    "key": "Access-Control-Allow-Origin",
-    "value": "https://app.smiletrace.com"
-  },
-  {
-    "key": "Access-Control-Allow-Credentials",
-    "value": "true"
-  },
-  {
-    "key": "Vary",
-    "value": "Origin"
-  },
-  {
-    "key": "Cross-Origin-Opener-Policy",
-    "value": "same-origin"
-  },
-  {
-    "key": "Cross-Origin-Embedder-Policy",
-    "value": "require-corp"
-  }
-];
+let securityHeaders = [];
+
+try {
+  const jsonPath = path.join(__dirname, 'security-headers.json');
+  const data = fs.readFileSync(jsonPath, 'utf-8');
+  securityHeaders = JSON.parse(data);
+} catch (e) {
+  console.warn('⚠️ security-headers.json not found, headers disabled.');
+}
 
 module.exports = {
   async headers() {
