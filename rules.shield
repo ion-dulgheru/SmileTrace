@@ -1,5 +1,5 @@
 environment "production" {
-  domain "https://app.smiletrace.com"
+  domain "https://smiletrace.vercel.app/"
   nonce_mode dynamic
 }
 
@@ -42,8 +42,8 @@ csp {
 
   connect {
     allow self
-    allow "https://api.smiletrace.com"
-    allow "https://app.smiletrace.com"
+    allow "https://smiletrace.vercel.app/"
+    allow "https://smiletrace.vercel.app/"
   }
 }
 
