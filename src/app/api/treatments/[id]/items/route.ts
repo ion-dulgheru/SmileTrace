@@ -3,17 +3,15 @@ import { treatmentService } from '@/services/treatment.service';
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/db';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
 /**
  * POST /api/treatments/[id]/items - Add procedure to treatment
  */
-export async function POST(req: NextRequest, { params }: RouteParams) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user?.id) {
@@ -23,9 +21,8 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // Check treatment ownership
     const treatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id },
       select: { dentistId: true }
     });
 
@@ -47,7 +44,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     
     const data = {
       ...body,
-      treatmentId: params.id,
+      treatmentId: id,
     };
 
     const item = await treatmentService.addProcedureToTooth(data);
@@ -80,8 +77,12 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 /**
  * GET /api/treatments/[id]/items - Get treatment items
  */
-export async function GET(req: NextRequest, { params }: RouteParams) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user) {
@@ -92,7 +93,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     }
 
     const items = await prisma.treatmentItem.findMany({
-      where: { treatmentId: params.id },
+      where: { treatmentId: id },
       include: {
         procedure: true,
       },
