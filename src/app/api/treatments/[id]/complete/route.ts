@@ -4,17 +4,12 @@ import { auth } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { PaymentMethod } from '@prisma/client';
 
-interface RouteParams {
-  params: {
-    id: string;
-  };
-}
-
-/**
- * PUT /api/treatments/[id]/complete - Finalize treatment
- */
-export async function PUT(req: NextRequest, { params }: RouteParams) {
+export async  function PUT(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
     const session = await auth();
     
     if (!session?.user?.id) {
@@ -26,7 +21,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     // Check treatment ownership
     const treatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       select: { 
         dentistId: true,
         totalCost: true,
@@ -65,7 +60,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     // Update payment
     const updatedTreatment = await treatmentService.updateTreatmentPayment({
-      treatmentId: params.id,
+      treatmentId: id,
       paidAmount: body.paidAmount || 0,
       paymentMethod: body.paymentMethod as PaymentMethod,
       transactionId: body.transactionId,
@@ -74,13 +69,13 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     // Mark all items as completed if fully paid
     if (updatedTreatment.paymentStatus === 'PAID') {
       await prisma.treatmentItem.updateMany({
-        where: { treatmentId: params.id },
+        where: { treatmentId: id },
         data: { status: 'COMPLETED' }
       });
 
       // Check if receipt already exists
       const existingReceipt = await prisma.receipt.findUnique({
-        where: { treatmentId: params.id }
+        where: { treatmentId: id }
       });
 
       if (!existingReceipt) {
@@ -91,7 +86,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         // Create receipt
         await prisma.receipt.create({
           data: {
-            treatmentId: params.id,
+            treatmentId: id,
             issuedById: session.user.id,
             receiptNumber,
             subtotal: updatedTreatment.totalCost + updatedTreatment.discount,
@@ -112,7 +107,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     // Return treatment with all details
     const completedTreatment = await prisma.treatment.findUnique({
-      where: { id: params.id },
+      where: { id: id },
       include: {
         patient: true,
         dentist: true,
@@ -131,7 +126,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         userName: session.user.name!,
         action: 'COMPLETE_TREATMENT',
         entityType: 'Treatment',
-        entityId: params.id,
+        entityId: id,
         newData: {
           paymentStatus: updatedTreatment.paymentStatus,
           paidAmount: updatedTreatment.paidAmount,
