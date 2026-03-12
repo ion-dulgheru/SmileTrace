@@ -1,9 +1,7 @@
-// middleware.ts
 import NextAuth from "next-auth"
-import { authConfig } from "@/lib/auth.config"  // ✅ fără Prisma
+import { authConfig } from "@/lib/auth.config"
 import { NextResponse } from "next/server"
 
-// ✅ Auth separat, doar JWT, compatibil Edge
 const { auth } = NextAuth(authConfig)
 
 function generateNonce(): string {
@@ -14,10 +12,11 @@ function generateNonce(): string {
 
 export default auth((req) => {
   const nonce = generateNonce()
+  const isDev = process.env.NODE_ENV === 'development'
 
   const csp = [
     "default-src 'none'",
-    `script-src 'self' 'nonce-${nonce}'`,
+    `script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ''}`,
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     "img-src 'self' data: blob: https:",
     "font-src 'self' https://fonts.gstatic.com",
@@ -27,7 +26,7 @@ export default auth((req) => {
     "object-src 'none'",
     "base-uri 'self'",
   ].join('; ')
-    console.log('✅ CSP setat pentru:', req.nextUrl.pathname)
+
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-nonce', nonce)
 
@@ -50,5 +49,3 @@ export const config = {
     },
   ],
 }
-
-

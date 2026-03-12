@@ -8,8 +8,8 @@ try {
   const data = fs.readFileSync(jsonPath, 'utf-8');
   const allHeaders = JSON.parse(data);
 
-  // ✅ SCOATE CSP din lista statică
-  securityHeaders = allHeaders.filter(h => 
+  // ✅ CSP e gestionat de middleware.ts cu nonce dinamic
+  securityHeaders = allHeaders.filter(h =>
     h.key !== 'Content-Security-Policy'
   );
 

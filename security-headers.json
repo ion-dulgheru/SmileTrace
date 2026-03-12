@@ -5,7 +5,7 @@
   },
   {
     "key": "Content-Security-Policy",
-    "value": "default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https data:; font-src 'self' https://fonts.gstatic.com; frame-src 'self'; connect-src 'self' https://smiletrace.vercel.app/; frame-ancestors 'self'"
+    "value": "default-src 'none'; script-src 'self' 'nonce-GPa+LGdDv12E+ILSK4fXRw=='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https data:; font-src 'self' https://fonts.gstatic.com; frame-src 'self'; connect-src 'self' https://smiletrace.vercel.app/; frame-ancestors 'self'"
   },
   {
     "key": "X-Frame-Options",
