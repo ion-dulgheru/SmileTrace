@@ -15,8 +15,9 @@ csp {
 
   script {
     allow self
-    allow inline
-    allow eval
+    block inline
+    block eval
+    nonce auto
   }
 
   style {
@@ -27,7 +28,6 @@ csp {
 
   image {
     allow self
-    allow data
     allow "http://localhost:3000"
   }
 
@@ -42,7 +42,6 @@ csp {
 
   connect {
     allow self
-    allow "https://smiletrace.vercel.app/"
     allow "https://smiletrace.vercel.app/"
   }
 }
@@ -67,5 +66,5 @@ cross_origin_isolation full
 
 cors {
   mode credentials
-  origin "https://app.smiletrace.com"
+  origin "https://smiletrace.vercel.app/"
 }
