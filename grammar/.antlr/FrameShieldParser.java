@@ -123,6 +123,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_policy; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterPolicy(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitPolicy(this);
+		}
 	}
 
 	public final PolicyContext policy() throws RecognitionException {
@@ -197,6 +205,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitStatement(this);
+		}
 	}
 
 	public final StatementContext statement() throws RecognitionException {
@@ -304,6 +320,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_env_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterEnv_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitEnv_stmt(this);
+		}
 	}
 
 	public final Env_stmtContext env_stmt() throws RecognitionException {
@@ -356,6 +380,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_env_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterEnv_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitEnv_prop(this);
+		}
 	}
 
 	public final Env_propContext env_prop() throws RecognitionException {
@@ -410,6 +442,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_transport_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterTransport_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitTransport_stmt(this);
+		}
 	}
 
 	public final Transport_stmtContext transport_stmt() throws RecognitionException {
@@ -460,6 +500,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_trans_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterTrans_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitTrans_prop(this);
+		}
 	}
 
 	public final Trans_propContext trans_prop() throws RecognitionException {
@@ -532,6 +580,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_csp_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterCsp_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitCsp_stmt(this);
+		}
 	}
 
 	public final Csp_stmtContext csp_stmt() throws RecognitionException {
@@ -590,6 +646,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_csp_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterCsp_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitCsp_prop(this);
+		}
 	}
 
 	public final Csp_propContext csp_prop() throws RecognitionException {
@@ -670,6 +734,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_resource_type; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterResource_type(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitResource_type(this);
+		}
 	}
 
 	public final Resource_typeContext resource_type() throws RecognitionException {
@@ -712,6 +784,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_resource_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterResource_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitResource_prop(this);
+		}
 	}
 
 	public final Resource_propContext resource_prop() throws RecognitionException {
@@ -771,6 +851,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_source_val; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterSource_val(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitSource_val(this);
+		}
 	}
 
 	public final Source_valContext source_val() throws RecognitionException {
@@ -810,6 +898,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_embedding_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterEmbedding_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitEmbedding_stmt(this);
+		}
 	}
 
 	public final Embedding_stmtContext embedding_stmt() throws RecognitionException {
@@ -842,6 +938,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_trust_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterTrust_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitTrust_stmt(this);
+		}
 	}
 
 	public final Trust_stmtContext trust_stmt() throws RecognitionException {
@@ -874,6 +978,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_referrer_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterReferrer_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitReferrer_stmt(this);
+		}
 	}
 
 	public final Referrer_stmtContext referrer_stmt() throws RecognitionException {
@@ -906,6 +1018,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_cross_origin_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterCross_origin_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitCross_origin_stmt(this);
+		}
 	}
 
 	public final Cross_origin_stmtContext cross_origin_stmt() throws RecognitionException {
@@ -938,6 +1058,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_target_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterTarget_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitTarget_stmt(this);
+		}
 	}
 
 	public final Target_stmtContext target_stmt() throws RecognitionException {
@@ -975,6 +1103,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_perm_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterPerm_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitPerm_stmt(this);
+		}
 	}
 
 	public final Perm_stmtContext perm_stmt() throws RecognitionException {
@@ -1027,6 +1163,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_perm_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterPerm_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitPerm_prop(this);
+		}
 	}
 
 	public final Perm_propContext perm_prop() throws RecognitionException {
@@ -1060,6 +1204,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_feature_val; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterFeature_val(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitFeature_val(this);
+		}
 	}
 
 	public final Feature_valContext feature_val() throws RecognitionException {
@@ -1104,6 +1256,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_cors_stmt; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterCors_stmt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitCors_stmt(this);
+		}
 	}
 
 	public final Cors_stmtContext cors_stmt() throws RecognitionException {
@@ -1154,6 +1314,14 @@ public class FrameShieldParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_cors_prop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).enterCors_prop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof FrameShieldListener ) ((FrameShieldListener)listener).exitCors_prop(this);
+		}
 	}
 
 	public final Cors_propContext cors_prop() throws RecognitionException {

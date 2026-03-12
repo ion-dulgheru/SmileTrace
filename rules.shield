@@ -15,9 +15,7 @@ csp {
 
   script {
     allow self
-    block inline
-    block eval
-    nonce auto
+    allow inline
   }
 
   style {
@@ -28,7 +26,8 @@ csp {
 
   image {
     allow self
-    allow "http://localhost:3000"
+    allow https
+    allow data
   }
 
   font {
