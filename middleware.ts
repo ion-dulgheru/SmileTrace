@@ -1,25 +1,18 @@
-import { auth } from "@/lib/auth"
+// middleware.ts
+import NextAuth from "next-auth"
+import { authConfig } from "@/lib/auth.config"  // ✅ fără Prisma
 import { NextResponse } from "next/server"
+
+// ✅ Auth separat, doar JWT, compatibil Edge
+const { auth } = NextAuth(authConfig)
 
 function generateNonce(): string {
   const array = new Uint8Array(16)
   crypto.getRandomValues(array)
-  return btoa(String.fromCharCode(...array))  // ✅ fără Buffer
+  return btoa(String.fromCharCode(...array))
 }
 
 export default auth((req) => {
-  const protectedPaths = ['/dashboard3']
-
-  const isProtectedPath = protectedPaths.some(path =>
-    req.nextUrl.pathname.startsWith(path)
-  )
-
-  if (isProtectedPath && !req.auth) {
-    const loginUrl = new URL('/login', req.nextUrl.origin)
-    loginUrl.searchParams.set('redirect_to', req.nextUrl.pathname)
-    return NextResponse.redirect(loginUrl)
-  }
-
   const nonce = generateNonce()
 
   const csp = [
@@ -31,11 +24,10 @@ export default auth((req) => {
     "frame-src 'self'",
     "connect-src 'self' https://smiletrace.vercel.app",
     "frame-ancestors 'self'",
-    "object-src 'none'",     // ✅ adăugat explicit
-    "base-uri 'self'",       // ✅ previne injectare <base> tag
+    "object-src 'none'",
+    "base-uri 'self'",
   ].join('; ')
 
-  // ✅ Nonce-ul merge în REQUEST headers (citit server-side de _document)
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-nonce', nonce)
 
@@ -44,13 +36,19 @@ export default auth((req) => {
   })
 
   response.headers.set('Content-Security-Policy', csp)
-  // ✅ x-nonce NU apare în response — doar în request (server-side)
-
   return response
 })
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico).*)',
+    {
+      source: '/((?!_next/static|_next/image|favicon.ico).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
   ],
 }
+
+

@@ -1,24 +1,16 @@
-// auth.ts
+// lib/auth.ts
 import NextAuth from "next-auth"
 import Google from "next-auth/providers/google"
 import Credentials from "next-auth/providers/credentials"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
-
+import { authConfig } from "./auth.config"  // ✅ adăugat
 import prisma from "./db"
 import bcrypt from "bcryptjs"
-import { Prisma, PrismaClient, UserRole } from "@prisma/client"
-import { DefaultArgs } from "@prisma/client/runtime/library"
+import { UserRole } from "@prisma/client"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,  // ✅ spread config de bază
   adapter: PrismaAdapter(prisma),
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login",
-    signOut: "/",
-    error: "/login",
-  },
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -29,11 +21,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           name: profile.name,
           email: profile.email,
           image: profile.picture,
-          role: "DENTIST" as UserRole, // Rol default pentru Google
+          role: "DENTIST" as UserRole,
         }
       },
     }),
-    Credentials({
+   Credentials({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -117,4 +109,3 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
 })
-
