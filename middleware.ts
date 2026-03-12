@@ -1,17 +1,16 @@
 import { auth } from "@/lib/auth"
 import { NextResponse } from "next/server"
-// ❌ import { randomBytes } from "crypto"  -- nu merge în Edge
 
 function generateNonce(): string {
   const array = new Uint8Array(16)
-  crypto.getRandomValues(array)  // ✅ Web Crypto API - funcționează în Edge
-  return Buffer.from(array).toString('base64')
+  crypto.getRandomValues(array)
+  return btoa(String.fromCharCode(...array))  // ✅ fără Buffer
 }
 
 export default auth((req) => {
   const protectedPaths = ['/dashboard3']
 
-  const isProtectedPath = protectedPaths.some(path => 
+  const isProtectedPath = protectedPaths.some(path =>
     req.nextUrl.pathname.startsWith(path)
   )
 
@@ -31,17 +30,27 @@ export default auth((req) => {
     "font-src 'self' https://fonts.gstatic.com",
     "frame-src 'self'",
     "connect-src 'self' https://smiletrace.vercel.app",
-    "frame-ancestors 'self'"
+    "frame-ancestors 'self'",
+    "object-src 'none'",     // ✅ adăugat explicit
+    "base-uri 'self'",       // ✅ previne injectare <base> tag
   ].join('; ')
 
-  const response = NextResponse.next()
+  // ✅ Nonce-ul merge în REQUEST headers (citit server-side de _document)
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set('x-nonce', nonce)
+
+  const response = NextResponse.next({
+    request: { headers: requestHeaders },
+  })
+
   response.headers.set('Content-Security-Policy', csp)
-  response.headers.set('x-nonce', nonce)
+  // ✅ x-nonce NU apare în response — doar în request (server-side)
+
   return response
 })
 
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico).*)',
-  ]
+  ],
 }

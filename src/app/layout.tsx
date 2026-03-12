@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/ThemeProvider"
 import { Providers } from "@/components/providers"
+import { headers } from "next/headers"  // ✅ adăugat
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,11 +20,13 @@ export const metadata: Metadata = {
   description: "Sistem profesional de management pentru clinica dentară",
 };
 
-export default function RootLayout({
+export default async function RootLayout({  // ✅ async adăugat
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const nonce = (await headers()).get('x-nonce') ?? ''  // ✅ citești nonce-ul
+
   return (
     <html lang="ro" suppressHydrationWarning>
       <body
@@ -34,6 +37,7 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
+          nonce={nonce}  // ✅ dacă ThemeProvider injectează scripturi
         >
           <Providers>
             {children}
