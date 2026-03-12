@@ -1,1 +1,71 @@
-FRAME_STRATEGY: BLOCK_ALL
+environment "production" {
+  domain "https://app.smiletrace.com"
+  nonce_mode dynamic
+}
+
+transport {
+  enforce_https true
+  max_age 31536000
+  include_subdomains true
+  preload true
+}
+
+csp {
+  default none
+
+  script {
+    allow self
+    allow inline
+    allow eval
+  }
+
+  style {
+    allow self
+    allow inline
+    allow "https://fonts.googleapis.com"
+  }
+
+  image {
+    allow self
+    allow data
+    allow "http://localhost:3000"
+  }
+
+  font {
+    allow self
+    allow "https://fonts.gstatic.com"
+  }
+
+  frame {
+    allow self
+  }
+
+  connect {
+    allow self
+    allow "https://api.smiletrace.com"
+    allow "https://app.smiletrace.com"
+  }
+}
+
+embedding same_origin
+
+content_trust no_sniff
+
+referrer strict_origin_when_cross_origin
+
+permissions {
+  camera none
+  microphone none
+  geolocation self
+  payment none
+  usb none
+  autoplay self
+  fullscreen self
+}
+
+cross_origin_isolation full
+
+cors {
+  mode credentials
+  origin "https://app.smiletrace.com"
+}

@@ -1,4 +1,9 @@
-[
+// FrameShield — Next.js Security Headers (Auto-Generated)
+// Generated: 2026-03-10T06:38:43.053Z
+// WARNING: Nu editați manual — regenerați din rules.shield
+
+/** @type {import("next").NextConfig} */
+const securityHeaders = [
   {
     "key": "Strict-Transport-Security",
     "value": "max-age=31536000; includeSubDomains; preload"
@@ -43,4 +48,10 @@
     "key": "Cross-Origin-Embedder-Policy",
     "value": "require-corp"
   }
-]
+];
+
+module.exports = {
+  async headers() {
+    return [{ source: "/(.*)", headers: securityHeaders }];
+  },
+};
